@@ -36,14 +36,25 @@ https://github.com/heroku/heroku-buildpack-ruby
 https://github.com/Lostmyname/heroku-buildpack-post-build-clean
 ```
 
-The `.slug-post-clean` file supports single-file and single-directory
-declarations only, e.g.:
+The `.slug-post-clean` file supports single-file and single-directory patterns, **as well as glob patterns**, e.g.:
 
 ```
 some_huge_file.psd
 some/nested/directory
 why_does_this_app_even_contain_a.tiff
+your_frontend/build/*.map
 ```
 
-I might expand it to support file globs, but for the moment it's not
-necessary and the testing implications give me the willies.
+Glob patterns are expanded using Bash syntax - not with a third-party library such as [node-glob](https://github.com/isaacs/node-glob). You can see what your glob matches from  `bash` with this command:
+
+```bash
+ls -d1 your/glob/pattern/*
+```
+
+## Testing
+
+The `bin/compile` script does all the heavy lifting for this package. It takes a single argument, $BUILD_DIR, the directory of your app. If you want to test it out locally and make sure your app still runs after the post-build cleanup, you can copy `bin/compile` into your app directory and run:
+
+```bash
+chmod +x compile; ./compile .
+```

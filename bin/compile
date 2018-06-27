@@ -17,15 +17,29 @@ if [[ ! -f "${CLEAN_FILES}" ]]; then
   exit 1
 fi
 
+function remove_file_or_dir {
+  if [[ -f "$1" ]]; then
+    echo "Removing file $1 from slug"
+    rm -f $1
+  elif [[ -d "$1" ]]; then
+    echo "Removing directory $1 from slug"
+    rm -rf $1
+  else
+    echo "Location $1 not found - ignoring"
+  fi
+}
+
+export -f remove_file_or_dir
+
 while read file; do
   [[ ! -n "${file}" ]] && continue
 
-  if [[ -f "${file}" ]]; then
-    echo "Removing file ${file} from slug"
-    rm -f ${file}
-  elif [[ -d "${file}" ]]; then
-    echo "Removing directory ${file} from slug"
-    rm -rf ${file}
+  if [[ -f "${file}" || -d "${file}" ]]; then
+    # Target is a file or directory, remove it
+    remove_file_or_dir ${file}
+  elif ls -d $(echo $file) &> /dev/null; then
+    # target is a glob, expand it and remove everything it matches
+    ls -d1 $(echo $file) | while read line; do remove_file_or_dir $line; done
   else
     echo "Location ${file} not found - ignoring"
   fi
