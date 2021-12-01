@@ -23,7 +23,7 @@ part of the slug.
 
 ## Usage
 
-Add the buildpack to your app using the Heroku CLI: `heroku buildpacks:add https://github.com/Lostmyname/heroku-buildpack-post-build-clean`. The post-build-clean buildpack **must** be last in the
+Add the buildpack to your app using the Heroku CLI: `heroku buildpacks:add https://github.com/vintasoftware/heroku-buildpack-post-build-clean`. The post-build-clean buildpack **must** be last in the
 buildpack order:
 
 ```
@@ -32,7 +32,7 @@ $ heroku buildpacks
 === test-app-12345 Buildpack URLs
 1. heroku/nodejs
 2. heroku/python
-3. https://github.com/Lostmyname/heroku-buildpack-post-build-clean
+3. https://github.com/vintasoftware/heroku-buildpack-post-build-clean
 ```
 
 The `.slug-post-clean` file supports single-file and single-directory patterns, **as well as glob patterns**, e.g.:
