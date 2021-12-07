@@ -17,6 +17,12 @@ if [[ ! -f "${CLEAN_FILES}" ]]; then
   exit 1
 fi
 
+# Add a trailing newline to .slug-post-clean file
+# to ensure the while below gets the last line
+if [ "$(tail -c1 "${CLEAN_FILES}"; echo x)" != $'\nx' ]; then
+    echo "" >>"${CLEAN_FILES}"
+fi
+
 function remove_file_or_dir {
   if [[ -f "$1" ]]; then
     echo "Removing file $1 from slug"
